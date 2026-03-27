@@ -13,8 +13,8 @@ import { Card } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 
 const clientTypeOptions = [
-  { value: 'DIRETO', label: 'Direto' },
-  { value: 'AGENCIA', label: 'Agencia' },
+  { value: 'NOVO', label: 'Novo' },
+  { value: 'CASA', label: 'Casa' },
 ];
 
 export default function NovaCampanhaPage() {

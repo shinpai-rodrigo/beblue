@@ -11,11 +11,11 @@ import { Card } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 
 const roleOptions = [
-  { value: 'EXECUTIVO', label: 'Executivo' },
-  { value: 'OPERACAO', label: 'Operacao' },
+  { value: 'COMERCIAL', label: 'Comercial' },
+  { value: 'OPERACAO', label: 'Operação' },
   { value: 'FINANCEIRO', label: 'Financeiro' },
   { value: 'ADMIN', label: 'Administrador' },
-  { value: 'VISUALIZADOR', label: 'Visualizador' },
+  { value: 'GESTOR', label: 'Gestor' },
 ];
 
 export default function NovoFuncionarioPage() {

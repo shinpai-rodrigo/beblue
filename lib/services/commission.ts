@@ -14,16 +14,16 @@ export async function generateCommissions(campaignId: string) {
     throw new Error('Campanha não encontrada');
   }
 
-  const clientType = campaign.client.clientType || 'DIRETO';
+  const clientType = campaign.client.clientType || 'NOVO';
   const marginResult = await calculateCampaignMargin(campaignId);
   const now = new Date();
   const commissions: any[] = [];
 
-  // Executive commission
+  // Executive (comercial) commission
   if (campaign.executiveId) {
     const rule = await prisma.commissionRule.findFirst({
       where: {
-        role: 'EXECUTIVO',
+        role: 'COMERCIAL',
         clientType,
         active: true,
         validFrom: { lte: now },
@@ -49,7 +49,6 @@ export async function generateCommissions(campaignId: string) {
         where: {
           campaignId,
           employeeId: campaign.executiveId,
-          role: 'EXECUTIVO',
           deletedAt: null,
           status: { notIn: ['CANCELADA'] },
         },
@@ -61,7 +60,6 @@ export async function generateCommissions(campaignId: string) {
             campaignId,
             employeeId: campaign.executiveId,
             ruleId: rule.id,
-            role: 'EXECUTIVO',
             basis: rule.basis,
             basisValue,
             percentage,
@@ -147,7 +145,7 @@ export async function recalculateCommission(commissionId: string) {
     throw new Error('Comissão não encontrada');
   }
 
-  if (commission.status === 'PAGA' || commission.status === 'CONGELADA') {
+  if (commission.status === 'PAGA' || commission.frozen) {
     throw new Error('Não é possível recalcular comissão paga ou congelada');
   }
 
@@ -183,7 +181,7 @@ export async function freezeCommissions(campaignId: string): Promise<void> {
       deletedAt: null,
     },
     data: {
-      status: 'CONGELADA',
+      frozen: true,
     },
   });
 }

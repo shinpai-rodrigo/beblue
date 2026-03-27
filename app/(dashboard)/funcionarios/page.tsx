@@ -25,10 +25,11 @@ interface Employee {
 }
 
 const roleOptions = [
-  { value: 'EXECUTIVO', label: 'Executivo' },
-  { value: 'OPERACAO', label: 'Operacao' },
+  { value: 'COMERCIAL', label: 'Comercial' },
+  { value: 'OPERACAO', label: 'Operação' },
   { value: 'FINANCEIRO', label: 'Financeiro' },
   { value: 'ADMIN', label: 'Admin' },
+  { value: 'GESTOR', label: 'Gestor' },
 ];
 
 export default function FuncionariosPage() {

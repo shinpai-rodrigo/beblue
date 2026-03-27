@@ -51,14 +51,13 @@ const categoryOptions = [
 ];
 
 const roleOptions = [
-  { value: 'EXECUTIVO', label: 'Executivo' },
-  { value: 'OPERACAO', label: 'Operacao' },
+  { value: 'COMERCIAL', label: 'Comercial' },
+  { value: 'OPERACAO', label: 'Operação' },
 ];
 
 const clientTypeOptions = [
-  { value: 'DIRETO', label: 'Direto' },
-  { value: 'AGENCIA', label: 'Agencia' },
-  { value: 'TODOS', label: 'Todos' },
+  { value: 'NOVO', label: 'Novo' },
+  { value: 'CASA', label: 'Casa' },
 ];
 
 const userRoleOptions = [
@@ -66,7 +65,7 @@ const userRoleOptions = [
   { value: 'FINANCEIRO', label: 'Financeiro' },
   { value: 'COMERCIAL', label: 'Comercial' },
   { value: 'OPERACAO', label: 'Operacao' },
-  { value: 'VISUALIZADOR', label: 'Visualizador' },
+  { value: 'GESTOR', label: 'Gestor' },
 ];
 
 export default function ConfiguracoesPage() {

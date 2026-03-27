@@ -156,7 +156,7 @@ export interface ClosingEntry {
   category: string;
 }
 
-export type UserRole = 'ADMIN' | 'FINANCEIRO' | 'COMERCIAL' | 'OPERACAO' | 'VISUALIZADOR';
+export type UserRole = 'ADMIN' | 'FINANCEIRO' | 'COMERCIAL' | 'OPERACAO' | 'GESTOR';
 
 export function toNumber(decimal: any): number {
   if (decimal === null || decimal === undefined) return 0;

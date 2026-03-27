@@ -45,7 +45,7 @@ const roleLabels: Record<string, string> = {
   FINANCEIRO: 'Financeiro',
   COMERCIAL: 'Comercial',
   OPERACAO: 'Operacao',
-  VISUALIZADOR: 'Visualizador',
+  GESTOR: 'Gestor',
 };
 
 function Sidebar() {

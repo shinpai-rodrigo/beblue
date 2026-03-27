@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const commissionRuleSchema = z.object({
-  role: z.enum(['EXECUTIVO', 'OPERACAO'], {
-    errorMap: () => ({ message: 'Papel deve ser EXECUTIVO ou OPERACAO' }),
+  role: z.enum(['COMERCIAL', 'OPERACAO'], {
+    errorMap: () => ({ message: 'Papel deve ser COMERCIAL ou OPERACAO' }),
   }),
   clientType: z.enum(['NOVO', 'CASA'], {
     errorMap: () => ({ message: 'Tipo de cliente deve ser NOVO ou CASA' }),

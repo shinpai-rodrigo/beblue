@@ -52,11 +52,20 @@ echo "Database ready!"
 export DATABASE_URL="postgresql://beblue:${DB_PASSWORD}@localhost:5432/beblue"
 echo "DATABASE_URL set to local PostgreSQL instance"
 
-# Set JWT_SECRET if not already set — generate a strong random one and warn
+# JWT_SECRET — generate a strong persistent one if not provided
 if [ -z "$JWT_SECRET" ]; then
-  export JWT_SECRET=$(head -c 48 /dev/urandom | od -An -tx1 | tr -d ' \n')
-  echo "WARNING: JWT_SECRET was not set. Generated a random 96-char secret for this session."
-  echo "WARNING: Sessions will not survive container restarts. Set JWT_SECRET for persistence."
+  # Check if we have a previously generated secret persisted to disk
+  JWT_SECRET_FILE="/app/.jwt_secret"
+  if [ -f "$JWT_SECRET_FILE" ]; then
+    export JWT_SECRET=$(cat "$JWT_SECRET_FILE")
+    echo "INFO: JWT_SECRET loaded from persisted file."
+  else
+    export JWT_SECRET=$(head -c 48 /dev/urandom | od -An -tx1 | tr -d ' \n')
+    echo "$JWT_SECRET" > "$JWT_SECRET_FILE"
+    chmod 600 "$JWT_SECRET_FILE"
+    echo "WARNING: JWT_SECRET was not set. Generated and persisted a random 96-char secret."
+    echo "WARNING: Set JWT_SECRET as an environment variable for production deployments."
+  fi
 fi
 
 # Write .env for Next.js build and runtime (ensures env vars are available during build)
