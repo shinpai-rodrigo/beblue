@@ -17,9 +17,9 @@ export const createClientSchema = z.object({
   city: z.string().max(100).optional().nullable(),
   state: z.string().max(2).optional().nullable(),
   zipCode: z.string().max(10).optional().nullable(),
-  clientType: z.enum(['DIRETO', 'AGENCIA'], {
-    errorMap: () => ({ message: 'Tipo de cliente deve ser DIRETO ou AGENCIA' }),
-  }).default('DIRETO'),
+  clientType: z.enum(['NOVO', 'CASA'], {
+    errorMap: () => ({ message: 'Tipo de cliente deve ser NOVO ou CASA' }),
+  }).default('NOVO'),
   notes: z.string().optional().nullable(),
   active: z.boolean().default(true),
 });

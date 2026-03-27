@@ -79,10 +79,10 @@ export async function GET(request: NextRequest) {
     let totalReceivable = 0;
     let totalReceived = 0;
     for (const r of receivables) {
-      if (r.status === 'PENDENTE' || r.status === 'VENCIDO') {
+      if (r.status === 'EMITIDA' || r.status === 'ENVIADA' || r.status === 'VENCIDA') {
         totalReceivable += toNumber(r.value);
       }
-      if (r.status === 'RECEBIDO') {
+      if (r.status === 'PAGA') {
         totalReceived += toNumber(r.receivedValue || r.value);
       }
     }
@@ -170,7 +170,7 @@ export async function GET(request: NextRequest) {
       const monthReceivables = await prisma.receivable.findMany({
         where: {
           deletedAt: null,
-          status: 'RECEBIDO',
+          status: 'PAGA',
           receivedDate: { gte: monthStart, lte: monthEnd },
         },
         select: { receivedValue: true, value: true },

@@ -21,7 +21,7 @@ export const updateReimbursementSchema = z.object({
   requestedValue: z.number().positive('Valor deve ser positivo').optional(),
   approvedValue: z.number().nonnegative('Valor aprovado não pode ser negativo').optional().nullable(),
   status: z.enum([
-    'ENVIADO', 'EM_ANALISE', 'APROVADO', 'APROVADO_PARCIAL', 'REJEITADO', 'PAGO', 'CANCELADO',
+    'ENVIADO', 'EM_ANALISE', 'APROVADO', 'APROVADO_PARCIAL', 'REJEITADO', 'PAGO',
   ]).optional(),
   rejectionReason: z.string().optional().nullable(),
   paidDate: z.string().optional().nullable(),

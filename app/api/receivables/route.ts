@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (overdue === 'true') {
-      where.status = 'PENDENTE';
+      where.status = { in: ['EMITIDA', 'ENVIADA'] };
       where.dueDate = { lt: new Date() };
     }
 
@@ -47,9 +47,9 @@ export async function GET(request: NextRequest) {
 
       for (const r of allReceivables) {
         const value = toNumber(r.value);
-        if (r.status === 'RECEBIDO') {
+        if (r.status === 'PAGA') {
           totalReceived += toNumber(r.receivedValue || r.value);
-        } else if (r.status === 'PENDENTE') {
+        } else if (r.status === 'EMITIDA' || r.status === 'ENVIADA') {
           totalReceivable += value;
           if (r.dueDate && r.dueDate < new Date()) {
             totalOverdue += value;

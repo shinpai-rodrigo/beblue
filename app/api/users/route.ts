@@ -11,7 +11,7 @@ const createUserSchema = z.object({
   name: z.string({ required_error: 'Nome é obrigatório' }).min(2, 'Nome deve ter pelo menos 2 caracteres'),
   email: z.string({ required_error: 'E-mail é obrigatório' }).email('E-mail inválido'),
   password: z.string({ required_error: 'Senha é obrigatória' }).min(8, 'Senha deve ter pelo menos 8 caracteres'),
-  role: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'VISUALIZADOR'], {
+  role: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'GESTOR'], {
     errorMap: () => ({ message: 'Papel inválido' }),
   }),
   active: z.boolean().default(true),

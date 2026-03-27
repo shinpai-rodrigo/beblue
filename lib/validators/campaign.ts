@@ -10,7 +10,7 @@ export const createCampaignSchema = z.object({
   operationId: z.string().uuid('ID do operacional inválido').optional().nullable(),
   costCenterId: z.string().uuid('ID do centro de custo inválido').optional().nullable(),
   status: z.enum([
-    'RASCUNHO', 'EM_ANDAMENTO', 'CONCLUIDA', 'CANCELADA', 'PAUSADA',
+    'RASCUNHO', 'ATIVA', 'PAUSADA', 'ENCERRADA', 'CANCELADA',
   ], {
     errorMap: () => ({ message: 'Status inválido' }),
   }).default('RASCUNHO'),

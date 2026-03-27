@@ -11,6 +11,42 @@ interface RouteParams {
   params: Promise<{ id: string; influencerId: string }>;
 }
 
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  try {
+    const session = await requireRole(request, ALLOWED_ROLES);
+    const { id, influencerId } = await params;
+
+    const influencer = await prisma.campaignInfluencer.findFirst({
+      where: { id: influencerId, campaignId: id },
+    });
+
+    if (!influencer) {
+      return NextResponse.json(
+        { success: false, error: 'Influenciador não encontrado nesta campanha' },
+        { status: 404 }
+      );
+    }
+
+    const payments = await prisma.influencerPayment.findMany({
+      where: { campaignInfluencerId: influencerId },
+      orderBy: { paymentDate: 'desc' },
+    });
+
+    const data = payments.map((p) => ({
+      ...p,
+      value: toNumber(p.value),
+    }));
+
+    return NextResponse.json({ success: true, data });
+  } catch (error: any) {
+    if (error.status) {
+      return NextResponse.json({ success: false, error: error.message }, { status: error.status });
+    }
+    console.error('Erro ao listar pagamentos:', error);
+    return NextResponse.json({ success: false, error: 'Erro interno do servidor' }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
     const session = await requireRole(request, ALLOWED_ROLES);

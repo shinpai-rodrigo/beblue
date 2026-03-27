@@ -125,3 +125,34 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ success: false, error: 'Erro interno do servidor' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  try {
+    const session = await requireRole(request, ALLOWED_ROLES);
+    const { id } = await params;
+
+    const existing = await prisma.weeklyClosing.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ success: false, error: 'Fechamento não encontrado' }, { status: 404 });
+    }
+
+    if (existing.status === 'FECHADO') {
+      return NextResponse.json(
+        { success: false, error: 'Não é possível remover um fechamento já concluído' },
+        { status: 400 }
+      );
+    }
+
+    await prisma.weeklyClosing.delete({ where: { id } });
+
+    await logAudit(session.userId, 'DELETE', 'WeeklyClosing', id, existing, null);
+
+    return NextResponse.json({ success: true, message: 'Fechamento removido com sucesso' });
+  } catch (error: any) {
+    if (error.status) {
+      return NextResponse.json({ success: false, error: error.message }, { status: error.status });
+    }
+    console.error('Erro ao remover fechamento:', error);
+    return NextResponse.json({ success: false, error: 'Erro interno do servidor' }, { status: 500 });
+  }
+}

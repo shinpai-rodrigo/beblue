@@ -86,13 +86,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Validate status transitions
     const validTransitions: Record<string, string[]> = {
-      ENVIADO: ['EM_ANALISE', 'CANCELADO'],
-      EM_ANALISE: ['APROVADO', 'APROVADO_PARCIAL', 'REJEITADO', 'CANCELADO'],
-      APROVADO: ['PAGO', 'CANCELADO'],
-      APROVADO_PARCIAL: ['PAGO', 'CANCELADO'],
+      ENVIADO: ['EM_ANALISE'],
+      EM_ANALISE: ['APROVADO', 'APROVADO_PARCIAL', 'REJEITADO'],
+      APROVADO: ['PAGO'],
+      APROVADO_PARCIAL: ['PAGO'],
       REJEITADO: [],
       PAGO: [],
-      CANCELADO: [],
     };
 
     if (parsed.data.status && parsed.data.status !== existing.status) {
@@ -173,7 +172,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     await prisma.reimbursement.update({
       where: { id },
-      data: { deletedAt: new Date(), status: 'CANCELADO' },
+      data: { deletedAt: new Date() },
     });
 
     await logAudit(session.userId, 'DELETE', 'Reimbursement', id, existing, null);

@@ -31,7 +31,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://beblue:${DB_PASSWORD:-beblue123}@postgres:5432/beblue
-      JWT_SECRET: ${JWT_SECRET:-d41ecdf3a27488ea8b35f7d0d99ffd08e2179d654331962e45a7f7713881c068}
+      JWT_SECRET: ${JWT_SECRET:-}
       NEXT_PUBLIC_APP_NAME: BeBlue
       NEXT_PUBLIC_APP_URL: https://beblue.shinp.ai
       NODE_ENV: production

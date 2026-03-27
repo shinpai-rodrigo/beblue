@@ -11,7 +11,7 @@ const updateUserSchema = z.object({
   name: z.string().min(2).optional(),
   email: z.string().email('E-mail inválido').optional(),
   password: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres').optional(),
-  role: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'VISUALIZADOR']).optional(),
+  role: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'GESTOR']).optional(),
   active: z.boolean().optional(),
 });
 

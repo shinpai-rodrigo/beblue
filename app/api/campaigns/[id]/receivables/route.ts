@@ -72,7 +72,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         ...rest,
         campaignId: id,
         clientId: rest.clientId || campaign.clientId,
-        status: 'PENDENTE',
+        status: 'EMITIDA',
         issueDate: issueDate ? new Date(issueDate) : null,
         dueDate: new Date(dueDate),
       },

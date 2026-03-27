@@ -19,7 +19,7 @@ export const createEmployeeSchema = z.object({
   createUser: z.boolean().default(false),
   userEmail: z.string().email('E-mail do usuário inválido').optional().nullable(),
   userPassword: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres').optional().nullable(),
-  userRole: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'VISUALIZADOR']).optional().nullable(),
+  userRole: z.enum(['ADMIN', 'FINANCEIRO', 'COMERCIAL', 'OPERACAO', 'GESTOR']).optional().nullable(),
 });
 
 export const updateEmployeeSchema = createEmployeeSchema.partial().omit({

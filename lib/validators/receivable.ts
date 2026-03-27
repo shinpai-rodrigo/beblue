@@ -23,7 +23,7 @@ export const updateReceivableSchema = z.object({
   installment: z.number().int().positive().optional().nullable(),
   totalInstallments: z.number().int().positive().optional().nullable(),
   notes: z.string().optional().nullable(),
-  status: z.enum(['PENDENTE', 'RECEBIDO', 'VENCIDO', 'CANCELADO']).optional(),
+  status: z.enum(['EMITIDA', 'ENVIADA', 'PAGA', 'CANCELADA', 'VENCIDA']).optional(),
   receivedDate: z.string().optional().nullable(),
   receivedValue: z.number().nonnegative().optional().nullable(),
   paymentMethod: z.string().max(50).optional().nullable(),

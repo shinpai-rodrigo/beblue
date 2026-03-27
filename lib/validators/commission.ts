@@ -4,8 +4,8 @@ export const commissionRuleSchema = z.object({
   role: z.enum(['EXECUTIVO', 'OPERACAO'], {
     errorMap: () => ({ message: 'Papel deve ser EXECUTIVO ou OPERACAO' }),
   }),
-  clientType: z.enum(['DIRETO', 'AGENCIA'], {
-    errorMap: () => ({ message: 'Tipo de cliente deve ser DIRETO ou AGENCIA' }),
+  clientType: z.enum(['NOVO', 'CASA'], {
+    errorMap: () => ({ message: 'Tipo de cliente deve ser NOVO ou CASA' }),
   }),
   basis: z.enum(['VALOR_VENDIDO', 'MARGEM'], {
     errorMap: () => ({ message: 'Base de cálculo deve ser VALOR_VENDIDO ou MARGEM' }),
@@ -22,7 +22,7 @@ export const commissionRuleSchema = z.object({
 
 export const updateCommissionSchema = z.object({
   status: z.enum([
-    'CALCULADA', 'APROVADA', 'PAGA', 'CANCELADA', 'CONGELADA',
+    'CALCULADA', 'APROVADA', 'PAGA', 'CANCELADA',
   ]).optional(),
   paidDate: z.string().optional().nullable(),
   paidValue: z.number().nonnegative().optional().nullable(),

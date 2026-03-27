@@ -13,7 +13,7 @@ export const createClosingSchema = z.object({
 
 export const updateClosingSchema = z.object({
   actualBalance: z.number().optional(),
-  status: z.enum(['ABERTO', 'FECHADO']).optional(),
+  status: z.enum(['ABERTO', 'CONCILIADO', 'FECHADO', 'DIVERGENTE']).optional(),
   justification: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
 });
