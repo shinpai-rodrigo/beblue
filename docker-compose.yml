@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: beblue-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: beblue
+      POSTGRES_USER: beblue
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-beblue123}
+    volumes:
+      - beblue_pgdata:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U beblue"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - beblue-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beblue-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://beblue:${DB_PASSWORD:-beblue123}@postgres:5432/beblue
+      JWT_SECRET: ${JWT_SECRET:-d41ecdf3a27488ea8b35f7d0d99ffd08e2179d654331962e45a7f7713881c068}
+      NEXT_PUBLIC_APP_NAME: BeBlue
+      NEXT_PUBLIC_APP_URL: https://beblue.shinp.ai
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    networks:
+      - beblue-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: beblue-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    networks:
+      - beblue-network
+
+volumes:
+  beblue_pgdata:
+    driver: local
+
+networks:
+  beblue-network:
+    driver: bridge
