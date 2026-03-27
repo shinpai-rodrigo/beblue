@@ -79,7 +79,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     );
 
     const totalReceived = campaign.receivables
-      .filter((r) => r.status === 'RECEBIDO')
+      .filter((r) => r.status === 'PAGA')
       .reduce((sum, r) => sum + toNumber(r.receivedValue || r.value), 0);
 
     const totalCommissions = campaign.commissions
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const commissions = campaign.commissions.map((c) => ({
       ...c,
-      basisValue: toNumber(c.basisValue),
+      baseValue: toNumber(c.baseValue),
       percentage: toNumber(c.percentage),
       calculatedValue: toNumber(c.calculatedValue),
       paidValue: c.paidValue ? toNumber(c.paidValue) : null,

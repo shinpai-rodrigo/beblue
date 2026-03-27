@@ -77,14 +77,14 @@ export async function POST(request: NextRequest) {
 
       // Create entries
       for (const entry of totals.entries) {
-        await tx.closingEntry.create({
+        await tx.weeklyClosingEntry.create({
           data: {
-            closingId: newClosing.id,
+            weeklyClosingId: newClosing.id,
             description: entry.description,
             type: entry.type,
             value: entry.value,
             category: entry.category,
-            referenceId: entry.referenceId || null,
+            reference: entry.referenceId || null,
           },
         });
       }

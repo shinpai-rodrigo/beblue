@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       const totalReimbursements = c.reimbursements.reduce((s, r) => s + toNumber(r.approvedValue), 0);
       const totalReceivables = c.receivables.reduce((s, r) => s + toNumber(r.value), 0);
       const totalReceived = c.receivables
-        .filter((r) => r.status === 'RECEBIDO')
+        .filter((r) => r.status === 'PAGA')
         .reduce((s, r) => s + toNumber(r.receivedValue || r.value), 0);
       const totalCommissions = c.commissions.reduce((s, cm) => s + toNumber(cm.calculatedValue), 0);
       const margin = soldValue - totalInfluencers - totalReimbursements;

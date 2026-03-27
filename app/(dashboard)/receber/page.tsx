@@ -80,7 +80,7 @@ export default function ReceberPage() {
     setModalLoading(true);
     const { error } = await apiPatch(
       `/api/campaigns/${selected.campaignId}/receivables/${selected.id}`,
-      { ...receiveForm, status: 'RECEBIDO' }
+      { ...receiveForm, status: 'PAGA' }
     );
     setModalLoading(false);
     if (error) { toast.error(error); }
@@ -88,7 +88,7 @@ export default function ReceberPage() {
   };
 
   const isOverdue = (item: Receivable) => {
-    return item.status !== 'RECEBIDO' && new Date(item.dueDate) < new Date();
+    return item.status !== 'PAGA' && item.status !== 'CANCELADA' && new Date(item.dueDate) < new Date();
   };
 
   const columns: Column<Receivable>[] = [
@@ -106,7 +106,7 @@ export default function ReceberPage() {
     { key: 'status', header: 'Status', render: (i) => <Badge>{i.status}</Badge> },
     { key: 'receivedValue', header: 'Recebido', render: (i) => i.receivedValue != null ? formatCurrency(i.receivedValue) : '-' },
     { key: 'actions', header: '', render: (i) => (
-      i.status !== 'RECEBIDO' ? (
+      i.status !== 'PAGA' && i.status !== 'CANCELADA' ? (
         <Button variant="ghost" size="sm" onClick={(e) => {
           e.stopPropagation();
           setSelected(i);
@@ -135,9 +135,11 @@ export default function ReceberPage() {
             <SearchInput onSearch={handleSearch} placeholder="Buscar por campanha ou cliente..." className="flex-1" />
             <Select
               options={[
-                { value: 'PENDENTE', label: 'Pendente' },
-                { value: 'RECEBIDO', label: 'Recebido' },
-                { value: 'VENCIDO', label: 'Vencido' },
+                { value: 'EMITIDA', label: 'Emitida' },
+                { value: 'ENVIADA', label: 'Enviada' },
+                { value: 'PAGA', label: 'Paga' },
+                { value: 'VENCIDA', label: 'Vencida' },
+                { value: 'CANCELADA', label: 'Cancelada' },
               ]}
               placeholder="Todos os status"
               value={status}

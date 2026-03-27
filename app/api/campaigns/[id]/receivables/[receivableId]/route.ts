@@ -75,7 +75,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     await prisma.receivable.update({
       where: { id: receivableId },
-      data: { status: 'CANCELADO', deletedAt: new Date() },
+      data: { status: 'CANCELADA', deletedAt: new Date() },
     });
 
     await logAudit(session.userId, 'DELETE', 'Receivable', receivableId, existing, null);

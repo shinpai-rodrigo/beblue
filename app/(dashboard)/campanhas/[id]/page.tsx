@@ -144,7 +144,7 @@ export default function CampanhaDetailPage() {
     setModalLoading(true);
     const { error } = await apiPatch(
       `/api/campaigns/${id}/receivables/${selectedReceivable.id}`,
-      { ...receiveForm, status: 'RECEBIDO' }
+      { ...receiveForm, status: 'PAGA' }
     );
     setModalLoading(false);
     if (error) { toast.error(error); }
@@ -233,7 +233,7 @@ export default function CampanhaDetailPage() {
     { key: 'status', header: 'Status', render: (i) => <Badge>{i.status}</Badge> },
     { key: 'receivedValue', header: 'Recebido', render: (i) => i.receivedValue != null ? formatCurrency(i.receivedValue) : '-' },
     { key: 'actions', header: 'Acoes', render: (i) => (
-      i.status !== 'RECEBIDO' ? (
+      i.status !== 'PAGA' && i.status !== 'CANCELADA' ? (
         <Button
           variant="ghost"
           size="sm"

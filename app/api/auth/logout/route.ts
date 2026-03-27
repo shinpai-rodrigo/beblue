@@ -1,10 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
     const isSecure = process.env.NODE_ENV === 'production' ||
       request.headers.get('x-forwarded-proto') === 'https' ||
       request.url.startsWith('https');
+
+    // Invalidate server-side session
+    const token = request.cookies.get('beblue-token')?.value;
+    if (token) {
+      await prisma.session.deleteMany({
+        where: { token },
+      }).catch(() => {
+        // Session may not exist, ignore
+      });
+    }
 
     const response = NextResponse.json({
       success: true,

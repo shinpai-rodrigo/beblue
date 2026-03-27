@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
     // Revenue: receivables received in period
     const receivedInPeriod = await prisma.receivable.findMany({
       where: {
-        deletedAt: null,
-        status: 'RECEBIDO',
+        status: 'PAGA',
         receivedDate: { gte: startDate, lte: endDate },
       },
       include: {
@@ -43,7 +42,7 @@ export async function GET(request: NextRequest) {
     const influencerPayments = await prisma.influencerPayment.findMany({
       where: { paymentDate: { gte: startDate, lte: endDate } },
       include: {
-        influencer: {
+        campaignInfluencer: {
           select: { name: true, campaign: { select: { name: true } } },
         },
       },
@@ -57,7 +56,6 @@ export async function GET(request: NextRequest) {
     // Expenses: reimbursements paid in period
     const reimbursementsPaid = await prisma.reimbursement.findMany({
       where: {
-        deletedAt: null,
         status: 'PAGO',
         paidDate: { gte: startDate, lte: endDate },
       },
@@ -74,7 +72,6 @@ export async function GET(request: NextRequest) {
     // Expenses: commissions paid in period
     const commissionsPaid = await prisma.commission.findMany({
       where: {
-        deletedAt: null,
         status: 'PAGA',
         paidDate: { gte: startDate, lte: endDate },
       },
@@ -95,8 +92,7 @@ export async function GET(request: NextRequest) {
     // Pending receivables
     const pendingReceivables = await prisma.receivable.findMany({
       where: {
-        deletedAt: null,
-        status: 'PENDENTE',
+        status: { in: ['EMITIDA', 'ENVIADA'] },
         dueDate: { gte: startDate, lte: endDate },
       },
       select: { value: true, dueDate: true },
@@ -110,8 +106,7 @@ export async function GET(request: NextRequest) {
     // Overdue receivables
     const overdueReceivables = await prisma.receivable.findMany({
       where: {
-        deletedAt: null,
-        status: 'PENDENTE',
+        status: { in: ['EMITIDA', 'ENVIADA'] },
         dueDate: { lt: new Date() },
       },
       select: { value: true },

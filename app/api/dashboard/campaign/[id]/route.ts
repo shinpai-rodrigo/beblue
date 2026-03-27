@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           where: { deletedAt: null },
           select: {
             id: true,
-            role: true,
+            basis: true,
             calculatedValue: true,
             paidValue: true,
             status: true,
@@ -85,15 +85,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     );
 
     const totalReceived = campaign.receivables
-      .filter((r) => r.status === 'RECEBIDO')
+      .filter((r) => r.status === 'PAGA')
       .reduce((s, r) => s + toNumber(r.receivedValue || r.value), 0);
 
     const totalPendingReceivables = campaign.receivables
-      .filter((r) => r.status === 'PENDENTE')
+      .filter((r) => ['EMITIDA', 'ENVIADA'].includes(r.status))
       .reduce((s, r) => s + toNumber(r.value), 0);
 
     const totalOverdueReceivables = campaign.receivables
-      .filter((r) => r.status === 'PENDENTE' && r.dueDate && r.dueDate < new Date())
+      .filter((r) => ['EMITIDA', 'ENVIADA'].includes(r.status) && r.dueDate && r.dueDate < new Date())
       .reduce((s, r) => s + toNumber(r.value), 0);
 
     const totalApprovedReimbursements = campaign.reimbursements

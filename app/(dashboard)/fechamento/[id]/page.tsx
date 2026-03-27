@@ -40,14 +40,14 @@ export default function FechamentoDetailPage() {
   const entryCols: Column<ClosingEntry>[] = [
     { key: 'description', header: 'Descricao', render: (i) => <span className="font-medium text-slate-900">{i.description}</span> },
     { key: 'type', header: 'Tipo', render: (i) => (
-      <Badge variant={i.type === 'INCOME' ? 'success' : 'danger'}>
-        {i.type === 'INCOME' ? 'Entrada' : 'Saida'}
+      <Badge variant={i.type === 'ENTRADA' ? 'success' : 'danger'}>
+        {i.type === 'ENTRADA' ? 'Entrada' : 'Saida'}
       </Badge>
     )},
     { key: 'category', header: 'Categoria', render: (i) => i.category || '-' },
     { key: 'value', header: 'Valor', sortable: true, render: (i) => (
-      <span className={i.type === 'INCOME' ? 'text-success-600 font-medium' : 'text-danger-600 font-medium'}>
-        {i.type === 'INCOME' ? '+' : '-'} {formatCurrency(i.value)}
+      <span className={i.type === 'ENTRADA' ? 'text-success-600 font-medium' : 'text-danger-600 font-medium'}>
+        {i.type === 'ENTRADA' ? '+' : '-'} {formatCurrency(i.value)}
       </span>
     )},
   ];

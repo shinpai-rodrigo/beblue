@@ -3,7 +3,7 @@ import { toNumber } from '@/lib/types';
 
 export interface ClosingEntry {
   description: string;
-  type: 'RECEITA' | 'DESPESA';
+  type: 'ENTRADA' | 'SAIDA';
   value: number;
   category: string;
   referenceId?: string;
@@ -30,8 +30,7 @@ export async function calculateWeeklyTotals(
         gte: weekStart,
         lte: weekEnd,
       },
-      status: 'RECEBIDO',
-      deletedAt: null,
+      status: 'PAGA',
     },
     include: {
       campaign: { select: { name: true } },
@@ -44,7 +43,7 @@ export async function calculateWeeklyTotals(
     totalIncome += value;
     entries.push({
       description: `NF ${r.invoiceNumber || 'S/N'} - ${r.client?.name || r.campaign?.name || 'Campanha'}`,
-      type: 'RECEITA',
+      type: 'ENTRADA',
       value,
       category: 'RECEBIVEL',
       referenceId: r.id,
@@ -60,7 +59,7 @@ export async function calculateWeeklyTotals(
       },
     },
     include: {
-      influencer: {
+      campaignInfluencer: {
         select: {
           name: true,
           campaign: { select: { name: true } },
@@ -73,8 +72,8 @@ export async function calculateWeeklyTotals(
     const value = toNumber(p.value);
     totalExpenses += value;
     entries.push({
-      description: `Pgto influenciador ${p.influencer.name} - ${p.influencer.campaign?.name || ''}`,
-      type: 'DESPESA',
+      description: `Pgto influenciador ${p.campaignInfluencer.name} - ${p.campaignInfluencer.campaign?.name || ''}`,
+      type: 'SAIDA',
       value,
       category: 'INFLUENCIADOR',
       referenceId: p.id,
@@ -89,7 +88,6 @@ export async function calculateWeeklyTotals(
         lte: weekEnd,
       },
       status: 'PAGO',
-      deletedAt: null,
     },
     include: {
       employee: { select: { name: true } },
@@ -101,7 +99,7 @@ export async function calculateWeeklyTotals(
     totalExpenses += value;
     entries.push({
       description: `Reembolso ${r.category} - ${r.employee.name}`,
-      type: 'DESPESA',
+      type: 'SAIDA',
       value,
       category: 'REEMBOLSO',
       referenceId: r.id,
@@ -116,7 +114,6 @@ export async function calculateWeeklyTotals(
         lte: weekEnd,
       },
       status: 'PAGA',
-      deletedAt: null,
     },
     include: {
       employee: { select: { name: true } },
@@ -128,8 +125,8 @@ export async function calculateWeeklyTotals(
     const value = toNumber(c.paidValue || c.calculatedValue);
     totalExpenses += value;
     entries.push({
-      description: `Comissão ${c.role} - ${c.employee.name} (${c.campaign?.name || ''})`,
-      type: 'DESPESA',
+      description: `Comissão ${c.basis} - ${c.employee.name} (${c.campaign?.name || ''})`,
+      type: 'SAIDA',
       value,
       category: 'COMISSAO',
       referenceId: c.id,

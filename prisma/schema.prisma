@@ -240,6 +240,7 @@ model CampaignInfluencer {
   notes           String?
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
+  deletedAt       DateTime?
 
   campaign Campaign             @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   payments InfluencerPayment[]
@@ -282,6 +283,7 @@ model Receivable {
   notes             String?
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
+  deletedAt         DateTime?
 
   campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   client   Client   @relation(fields: [clientId], references: [id])
@@ -307,8 +309,10 @@ model Reimbursement {
   receipt        String?
   status         ReimbursementStatus   @default(ENVIADO)
   reviewNotes    String?
+  paidDate       DateTime?
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
+  deletedAt      DateTime?
 
   employee   Employee    @relation(fields: [employeeId], references: [id])
   campaign   Campaign?   @relation(fields: [campaignId], references: [id], onDelete: SetNull)
@@ -366,6 +370,7 @@ model Commission {
   notes           String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
 
   campaign Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   employee Employee       @relation(fields: [employeeId], references: [id])
