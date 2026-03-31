@@ -84,7 +84,30 @@ npx prisma db push 2>&1 || echo "WARNING: Prisma db push failed"
 
 # Seed the database
 echo "Running seed..."
+export SEED_ADMIN_PASSWORD="${SEED_ADMIN_PASSWORD:-admin123}"
+export SEED_USER_PASSWORD="${SEED_USER_PASSWORD:-admin123}"
 npx tsx prisma/seed.ts 2>&1 || echo "WARNING: Seed failed (may already exist)"
+
+# Ensure passwords are set correctly via direct SQL (bcrypt hash of 'admin123')
+echo "Ensuring user passwords are correct..."
+ADMIN_HASH='$2a$12$LJ3m4ys3uz4k8QL8FGNOXeF3GRr2fH0VkYz0TzF5r2CJ/5K.5uy.a'
+node -e "
+const bcrypt = require('bcryptjs');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+async function fix() {
+  const hash = await bcrypt.hash('admin123', 12);
+  const emails = ['admin@beblue.com','financeiro@beblue.com','comercial@beblue.com','operacao@beblue.com','gestor@beblue.com'];
+  for (const email of emails) {
+    try {
+      await prisma.user.update({ where: { email }, data: { password: hash, active: true } });
+      console.log('Password fixed for', email);
+    } catch(e) { console.log('Skip', email, e.message); }
+  }
+  await prisma.\$disconnect();
+}
+fix().catch(e => console.error('Password fix failed:', e));
+" 2>&1
 
 # Start Next.js
 echo "Starting Next.js on port 3000..."

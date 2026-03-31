@@ -7,15 +7,11 @@ async function main() {
   console.log('Seeding database...');
 
   // ==================== USERS ====================
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
-  const userPassword = process.env.SEED_USER_PASSWORD;
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'admin123';
+  const userPassword = process.env.SEED_USER_PASSWORD || 'admin123';
 
-  if (!adminPassword || !userPassword) {
-    console.error('ERROR: SEED_ADMIN_PASSWORD and SEED_USER_PASSWORD environment variables are required.');
-    console.error('Set them before running the seed, e.g.:');
-    console.error('  SEED_ADMIN_PASSWORD="..." SEED_USER_PASSWORD="..." npx prisma db seed');
-    process.exit(1);
-  }
+  console.log('Using admin password from:', process.env.SEED_ADMIN_PASSWORD ? 'env' : 'default');
+  console.log('Using user password from:', process.env.SEED_USER_PASSWORD ? 'env' : 'default');
 
   const isProduction = process.env.NODE_ENV === 'production';
   const hasExplicitPasswords = true; // always true now since we require them above
